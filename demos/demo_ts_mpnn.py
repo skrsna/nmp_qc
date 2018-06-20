@@ -252,8 +252,8 @@ def train(train_loader, model, criterion, optimizer, epoch, evaluation, logger):
         train_loss = criterion(output, target)
 
         # Logs
-        losses.update(train_loss.data[0], g.size(0))
-        error_ratio.update(evaluation(output, target).data[0], g.size(0))
+        losses.update(train_loss.data.item(), g.size(0))
+        error_ratio.update(evaluation(output, target).data.item(), g.size(0))
 
         # compute gradient and do SGD step
         train_loss.backward()
