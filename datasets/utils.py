@@ -25,14 +25,16 @@ __email__ = "priba@cvc.uab.cat, adutta@cvc.uab.cat"
 
 def qm9_nodes(g, hydrogen=False):
     h = []
-    for n, d in g.nodes_iter(data=True):
+    for n, d in g.nodes(data=True):
         h_t = []
         # Atom type (One-hot H, C, N, O F)
         h_t += [int(d['a_type'] == x) for x in ['H', 'C', 'N', 'O', 'F']]
         # Atomic number
         h_t.append(d['a_num'])
-        # Partial Charge
+        """
+        # Partial Charge  Deleting this for ts now
         h_t.append(d['pc'])
+        """
         # Acceptor
         h_t.append(d['acceptor'])
         # Donor
@@ -50,8 +52,8 @@ def qm9_nodes(g, hydrogen=False):
 
 def qm9_edges(g, e_representation='raw_distance'):
     remove_edges = []
-    e={}    
-    for n1, n2, d in g.edges_iter(data=True):
+    e={}
+    for n1, n2, d in g.edges(data=True):
         e_t = []
         # Raw distance function
         if e_representation == 'chem_graph':
@@ -90,7 +92,7 @@ def qm9_edges(g, e_representation='raw_distance'):
     for edg in remove_edges:
         g.remove_edge(*edg)
     return nx.to_numpy_matrix(g), e
-    
+
 
 def normalize_data(data, mean, std):
     data_norm = (data-mean)/std
@@ -198,5 +200,3 @@ def save_checkpoint(state, is_best, directory):
     torch.save(state, checkpoint_file)
     if is_best:
         shutil.copyfile(checkpoint_file, best_model_file)
-
-
