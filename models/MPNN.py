@@ -86,7 +86,7 @@ class MPNN(nn.Module):
             h_t = self.u[0].forward(h[t], m)
 
             # Delete virtual nodes
-            h_t = (torch.sum(h_in, 2).expand_as(h_t) > 0).type_as(h_t) * h_t
+            h_t = (torch.sum(h_in, 2)[..., None].expand_as(h_t) > 0).type_as(h_t) * h_t
             h.append(h_t)
 
         # Readout
