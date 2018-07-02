@@ -167,6 +167,8 @@ def main():
             args.start_epoch = checkpoint['epoch']
             best_acc1 = checkpoint['best_er1']
             model.load_state_dict(checkpoint['state_dict'])
+            if args.cuda:
+                model.cuda()
             optimizer.load_state_dict(checkpoint['optimizer'])
             print("=> loaded best model '{}' (epoch {})".format(best_model_file, checkpoint['epoch']))
         else:
@@ -177,6 +179,7 @@ def main():
         print('\t* Cuda')
         model = model.cuda()
         criterion = criterion.cuda()
+    
 
     # Epoch for loop
     for epoch in range(0, args.epochs):
